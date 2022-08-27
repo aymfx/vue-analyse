@@ -14,6 +14,7 @@ import { EffectScope } from 'v3/reactivity/effectScope'
 let uid = 0
 
 export function initMixin(Vue: typeof Component) {
+  // 初始化操作  new Vue() ===> this._init()
   Vue.prototype._init = function (options?: Record<string, any>) {
     const vm: Component = this
     // a uid
@@ -34,11 +35,12 @@ export function initMixin(Vue: typeof Component) {
     vm.__v_skip = true
     // effect scope
     vm._scope = new EffectScope(true /* detached */)
-    // merge options
+    // merge options  合并options的选项
     if (options && options._isComponent) {
       // optimize internal component instantiation
       // since dynamic options merging is pretty slow, and none of the
       // internal component options needs special treatment.
+      // 优化内部组件实例化，因为动态选项合并非常慢，而且内部组件选项都不需要特殊处理。
       initInternalComponent(vm, options as any)
     } else {
       vm.$options = mergeOptions(
@@ -49,20 +51,20 @@ export function initMixin(Vue: typeof Component) {
     }
     /* istanbul ignore else */
     if (__DEV__) {
-      initProxy(vm)
+      initProxy(vm) // 开发环境使用代理
     } else {
       vm._renderProxy = vm
     }
     // expose real self
     vm._self = vm
-    initLifecycle(vm)
-    initEvents(vm)
-    initRender(vm)
-    callHook(vm, 'beforeCreate', undefined, false /* setContext */)
-    initInjections(vm) // resolve injections before data/props
-    initState(vm)
-    initProvide(vm) // resolve provide after data/props
-    callHook(vm, 'created')
+    initLifecycle(vm) //初始化生命周期
+    initEvents(vm) //初始化事件
+    initRender(vm) //初始化渲染函数
+    callHook(vm, 'beforeCreate', undefined, false /* setContext */) //beforeCreate 被调用
+    initInjections(vm) // resolve injections before data/props  //初始化inject inject的属性要在data/props之前
+    initState(vm) //初始化state data和props
+    initProvide(vm) // resolve provide after data/props 初始化provide  provide属性要在data/props之后
+    callHook(vm, 'created') //created 被调用
 
     /* istanbul ignore if */
     if (__DEV__ && config.performance && mark) {
@@ -72,6 +74,7 @@ export function initMixin(Vue: typeof Component) {
     }
 
     if (vm.$options.el) {
+      //判断有没el  有就开始挂载
       vm.$mount(vm.$options.el)
     }
   }

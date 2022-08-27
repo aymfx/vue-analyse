@@ -35,7 +35,7 @@
   },
   "sideEffects": false,
   "scripts": {
-    "dev": "rollup -w -c scripts/config.js --environment TARGET:full-dev",
+    "dev": "rollup -w -c scripts/config.js --sourcemap --environment TARGET:full-dev",
     "dev:cjs": "rollup -w -c scripts/config.js --environment TARGET:runtime-cjs-dev",
     "dev:esm": "rollup -w -c scripts/config.js --environment TARGET:runtime-esm",
     "dev:ssr": "rollup -w -c scripts/config.js --environment TARGET:server-renderer",
@@ -84,6 +84,8 @@
   "homepage": "https://github.com/vuejs/vue#readme",
   "dependencies": {
     "@vue/compiler-sfc": "workspace:*",
+    "@vue/consolidate": "^0.17.3",
+    "consolidate": "^0.16.0",
     "csstype": "^3.1.0"
   },
   "devDependencies": {

@@ -146,6 +146,7 @@ export function remove(arr: Array<any>, item: any): Array<any> | void {
  */
 const hasOwnProperty = Object.prototype.hasOwnProperty
 export function hasOwn(obj: Object | Array<any>, key: string): boolean {
+  // 判断属性不是存在obj上面
   return hasOwnProperty.call(obj, key)
 }
 

@@ -310,21 +310,23 @@ function normalizeProps(options: Record<string, any>, vm?: Component | null) {
   const res: Record<string, any> = {}
   let i, val, name
   if (isArray(props)) {
+    //对props进行处理
     i = props.length
     while (i--) {
       val = props[i]
       if (typeof val === 'string') {
         name = camelize(val)
-        res[name] = { type: null }
+        res[name] = { type: null } //tyep类型为null
       } else if (__DEV__) {
         warn('props must be strings when using array syntax.')
       }
     }
   } else if (isPlainObject(props)) {
+    // {name:{type:String,default:'ly'},"age":String}
     for (const key in props) {
       val = props[key]
       name = camelize(key)
-      res[name] = isPlainObject(val) ? val : { type: val }
+      res[name] = isPlainObject(val) ? val : { type: val } //isPlainObject()方法来判断是否为普通对象
     }
   } else if (__DEV__) {
     warn(
@@ -397,15 +399,18 @@ export function mergeOptions(
   child: Record<string, any>,
   vm?: Component | null
 ): ComponentOptions {
+  // 检查组件
   if (__DEV__) {
     checkComponents(child)
   }
 
   if (isFunction(child)) {
+    //可以是个函数
     // @ts-expect-error
     child = child.options
   }
 
+  // 序列化props  Inject Directives
   normalizeProps(child, vm)
   normalizeInject(child, vm)
   normalizeDirectives(child)
@@ -414,6 +419,7 @@ export function mergeOptions(
   // but only if it is a raw options object that isn't
   // the result of another mergeOptions call.
   // Only merged options has the _base property.
+  // 在子选项上应用extends和mixins，但前提是它是一个原始选项对象，不是另一个mergeOptions调用的结果。只有合并的选项具有_base属性。
   if (!child._base) {
     if (child.extends) {
       parent = mergeOptions(parent, child.extends, vm)

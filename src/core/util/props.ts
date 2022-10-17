@@ -25,24 +25,26 @@ export function validateProp(
   propsData: Object,
   vm?: Component
 ): any {
-  const prop = propOptions[key]
-  const absent = !hasOwn(propsData, key)
-  let value = propsData[key]
+  const prop = propOptions[key] //取出来prop
+  const absent = !hasOwn(propsData, key) //判断是不是存在propsData上面
+  let value = propsData[key] //有的话取出来
   // boolean casting
-  const booleanIndex = getTypeIndex(Boolean, prop.type)
+  const booleanIndex = getTypeIndex(Boolean, prop.type) //判断是不是boolean
   if (booleanIndex > -1) {
     if (absent && !hasOwn(prop, 'default')) {
       value = false
     } else if (value === '' || value === hyphenate(key)) {
+      //{'age':{type:nu}}
       // only cast empty string / same name to boolean if
       // boolean has higher priority
+      // 如果布尔值具有更高的优先级，则只将空字符串/相同名称转换为布尔值
       const stringIndex = getTypeIndex(String, prop.type)
       if (stringIndex < 0 || booleanIndex < stringIndex) {
         value = true
       }
     }
   }
-  // check default value
+  // check default value 检查默认值
   if (value === undefined) {
     value = getPropDefaultValue(vm, prop, key)
     // since the default value is a fresh copy,
@@ -191,19 +193,21 @@ const functionTypeCheckRE = /^\s*function (\w+)/
  * across different vms / iframes.
  */
 function getType(fn) {
-  const match = fn && fn.toString().match(functionTypeCheckRE)
+  const match = fn && fn.toString().match(functionTypeCheckRE) //function Boolean() { [native code] }
   return match ? match[1] : ''
 }
 
 function isSameType(a, b) {
+  //判断是不是相同的类型
   return getType(a) === getType(b)
 }
-
+//获取类型的下标   -1表示没有  比较Boolean
 function getTypeIndex(type, expectedTypes): number {
   if (!isArray(expectedTypes)) {
     return isSameType(expectedTypes, type) ? 0 : -1
   }
   for (let i = 0, len = expectedTypes.length; i < len; i++) {
+    //expectedTypes可能是一个数组
     if (isSameType(expectedTypes[i], type)) {
       return i
     }

@@ -50,6 +50,7 @@ export function proxy(target: Object, sourceKey: string, key: string) {
 }
 
 export function initState(vm: Component) {
+  // 初始化 data props methods computed  watch
   const opts = vm.$options
   if (opts.props) initProps(vm, opts.props)
 
@@ -74,14 +75,16 @@ function initProps(vm: Component, propsOptions: Object) {
   const props = (vm._props = shallowReactive({}))
   // cache prop keys so that future props updates can iterate using Array
   // instead of dynamic object key enumeration.
+  // 缓存prop keys，以便以后的道具更新可以使用数组迭代，而不是动态的对象键枚举。
   const keys: string[] = (vm.$options._propKeys = [])
   const isRoot = !vm.$parent
   // root instance props should be converted
+  //根实例道具应该被转换
   if (!isRoot) {
     toggleObserving(false)
   }
   for (const key in propsOptions) {
-    keys.push(key)
+    keys.push(key) //缓存键
     const value = validateProp(key, propsOptions, propsData, vm)
     /* istanbul ignore else */
     if (__DEV__) {
@@ -112,8 +115,9 @@ function initProps(vm: Component, propsOptions: Object) {
     // static props are already proxied on the component's prototype
     // during Vue.extend(). We only need to proxy props defined at
     // instantiation here.
+    // static props 在Vue.extend()期间已经在组件的原型上代理了。我们只需要实例化时定义的代理道具。
     if (!(key in vm)) {
-      proxy(vm, `_props`, key)
+      proxy(vm, `_props`, key) //代理
     }
   }
   toggleObserving(true)

@@ -156,6 +156,7 @@ export function defineReactive(
   let childOb = !shallow && observe(val, false, mock)
   Object.defineProperty(obj, key, {
     enumerable: true,
+
     configurable: true,
     get: function reactiveGetter() {
       const value = getter ? getter.call(obj) : val
